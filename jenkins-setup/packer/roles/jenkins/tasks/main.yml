@@ -56,5 +56,35 @@
   register: result
 - debug:
     msg: "Password: {{ result.stdout }}"
-- local_action: copy content={{ result.stdout }} dest=/Users/olivia.blaine/Documents/tmp_jenkins_password
+- local_action: copy content={{ result.stdout }} dest=/Users/nishant.nikhil/Documents/sdubootcamp-delivery/tmp_jenkins_password
   become: false
+- name: Get terrsform zipfile
+  get_url:
+    url: https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
+    dest: /tmp
+- name: Extract terraform zip file
+  shell: unzip /tmp/terraform_0.12.9_linux_amd64.zip
+- name: move terraform binary to bin
+  shell: sudo mv /home/ubuntu/terraform /usr/bin/terraform
+- name: get kubectl installed. get the file
+  shell: curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+- name: create kubernetes list repo
+  shell: sudo touch /etc/apt/sources.list.d/kubernetes.list
+- name: get the kubectl package
+  shell: echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+- name: update apt-get
+  shell: sudo apt-get update
+- name: install kubectl 
+  shell: sudo apt-get install -y kubectl
+- name: install docker
+  shell: sudo apt install -y docker.io
+- name: Enable service docker, and not touch the state
+  service:
+    name: docker
+    enabled: yes
+- name: get aws iam authenticator
+  shell: curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/aws-iam-authenticator
+- name: provide execute access to aws iam authenticator
+  shell: sudo chmod +x ./aws-iam-authenticator
+- name: move the aws iam authenticator to bin
+  shell: sudo mv aws-iam-authenticator /usr/bin/

@@ -1,8 +1,8 @@
-/*provider "aws" {
+provider "aws" {
   region = "eu-west-2"
-}*/
+}
 
-/* data "aws_ami" "pb_ami" {
+data "aws_ami" "pb_ami" {
   most_recent = true
 
   filter {
@@ -10,30 +10,76 @@
     values = ["platform-builders-jenkins"]
   }
 
-  /*tags = {
-    Name  = "Platform Build AMI"
-    owner = var.owner
+  tags = {
+    Name  = "Platform Builders AMI"
+    owner = "Platform Builders"
   }
 
-  owners = [var.aws_account_owner]
+  owners = ["426714351745"]
 }
-*/
 
-resource "aws_key_pair" "oli-key" {
-  key_name   = "oli-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVNvIJtNjLUuzbs6qVAceFMnqwNaRnq36wamUTspSJV7uG0+k2HKcul7x0p7Ejuj0Gvx+zgRytJV8HID/d0iWyKQkvMZjHn5ZY3ckFTCMa2mkx4OBQJl6nimxGmTv9uXgctviMbYlFwJtWz/XJY9IyXwDKII77RfIKKcUbKz2NDcjY81PHSFm7gcACmQ8jZjnizCI9Ha9t5x48lS7GQl1+1Mmb2gxHFzEh0R7W+ux/oGJ+C/D/5XltbLl/0Y2F6TMP72yKwz2dwQxcNpqYMyLV9IRfpNzUS9bl8bMyixZJUzkpaGrYeZU6fBlqWvwQ7TMXdzGcOON8ht+vPTxnNkE3"
+resource "aws_key_pair" "nishant-key" {
+  key_name   = "nishant-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDOs48N+jce8dPxkM891AUsAdhQJApC5Fh34DM15F/twqnWcDlJ2oATIFgoejDi6nBWSXN+NxvOz+5men9x/CKJMvMZhXaxsNOCGvClYz9HI+gJETbydQ7yvI81QtYO/wcqV6VcYUaPCspyXlFPBhLN7XMYr5nJ3HqCq2fMAsYqdK6hTsXAlgOWsYUbO5NZd/ln0r2edzl26xdzF6qmYpMdRdx+4tZOrmelgF094EKYtRnxYpyj89wsYAxp0JXJsqN4ryFy3eeJFymFuXslL9fLUcQ6g9nEzEfq6cYE5MGCpf1p34fEh/auxkvwGsKSwN4kjgfnWcQFpb4f8MoZzaP nishant.nikhil@NishantNikhils-MacBook-Pro.local"
+}
+
+resource "aws_iam_role" "jenkins_role" {
+  name = "jenkins_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
+  tags = {
+      Name = "Platform-Builder"
+  }
+}
+
+resource "aws_iam_instance_profile" "jenkins_profile" {
+  name = "jenkins_profile"
+  role = "${aws_iam_role.jenkins_role.name}"
+}
+
+resource "aws_iam_role_policy" "jenins_policy" {
+  name = "jenkins_policy"
+  role = "${aws_iam_role.jenkins_role.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "*",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_instance" "webserver" {
-  ami           = "ami-0f7c83809e26276d0"
+  ami           = "${data.aws_ami.pb_ami.id}"
   instance_type = "t2.micro"
-  /*iam_instance_profile = var.iam_role*/
-  key_name = "oli-key"
+  iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile.name}"
+  key_name = "nishant-key"
   security_groups = [
-    var.my_security_group
+    var.my_security_group,
   ]
   tags = {
     Name  = "Platform Builders Jenkins Server"
-    owner = var.owner
+    owner = "Platform Builders"
   }
 }
