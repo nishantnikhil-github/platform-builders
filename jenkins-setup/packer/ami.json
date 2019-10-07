@@ -12,7 +12,7 @@
     "ssh_username": "ubuntu",
     "ami_name": "platform-builders-jenkins",
 		"tags" : {
-			"Name": "Platform Builders API",
+			"Name": "Platform Builders AMI",
 			"owner": "Platform Builders"
 		},
     "source_ami_filter": {
