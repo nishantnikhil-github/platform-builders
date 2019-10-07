@@ -1,0 +1,20 @@
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvar
+
+# vault files
+
+*.zip
+vault
+
+*.tfvars
+
+#zip and vault
+.zip
+vault
