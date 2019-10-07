@@ -1,12 +1,11 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = "eu-west-2"
 }
 
-resource "aws_security_group" "red-sg-2" {
-  //name = "blue-ericechter-instance-${random_id.myrandom.hex}"
-  name = "red-sg-2"
+resource "aws_security_group" "pb-sg" {
+  name = "pb-sg"
   tags = {
-    Name  = "Red Team SG"
+    Name  = "Platform Builders SG"
     owner = var.owner
   }
   ingress {

@@ -1,39 +1,39 @@
 /*provider "aws" {
-  region = "eu-central-1"
+  region = "eu-west-2"
 }*/
 
-data "aws_ami" "red-ami" {
+/* data "aws_ami" "pb_ami" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["red-team-jenkins*"]
+    values = ["platform-builders-jenkins"]
   }
 
   /*tags = {
-    Name  = "Red Team AMI"
+    Name  = "Platform Build AMI"
     owner = var.owner
-  }*/
+  }
 
   owners = [var.aws_account_owner]
 }
+*/
 
-resource "aws_key_pair" "eric-key-2" {
-  key_name   = "eric-key-2"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDCrXmHHrI+9PR4m7/8imIRrwQWF6md+1oaCRZM/r8jpfhLqqsN8pIUztl+Lu6PxGp9KdJFIlKxUhcMn1pINXYdETq6Tp0lIUjxXLrA9eUkdjt6TU7UG3vR1ibR4Nx2SGwULntsrUNDoYQX8l1AGgM4jLLQoba45xIFfVRlUkvcHaReifHsDQHnYsHBSZ0tg0GI9KUnPBgyoNa9/eBgPLH3NbQdg98lKdjqSdRNITT2qGe6GyS1On2OWJiOYqNwhQQY8zwAaPhDpcthKH+Vp7+sB3odL3CQzAhZnOie4+6xsV/uIPkljYrrJDGfqGonekUpuWR9lSjPTe9ZxY6N4bVz eric.echter@EricEchters-MacBook-Pro.local"
+resource "aws_key_pair" "oli-key" {
+  key_name   = "oli-key"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVNvIJtNjLUuzbs6qVAceFMnqwNaRnq36wamUTspSJV7uG0+k2HKcul7x0p7Ejuj0Gvx+zgRytJV8HID/d0iWyKQkvMZjHn5ZY3ckFTCMa2mkx4OBQJl6nimxGmTv9uXgctviMbYlFwJtWz/XJY9IyXwDKII77RfIKKcUbKz2NDcjY81PHSFm7gcACmQ8jZjnizCI9Ha9t5x48lS7GQl1+1Mmb2gxHFzEh0R7W+ux/oGJ+C/D/5XltbLl/0Y2F6TMP72yKwz2dwQxcNpqYMyLV9IRfpNzUS9bl8bMyixZJUzkpaGrYeZU6fBlqWvwQ7TMXdzGcOON8ht+vPTxnNkE3"
 }
 
 resource "aws_instance" "webserver" {
-  for_each      = toset(keys(var.servers))
-  ami           = "${data.aws_ami.red-ami.id}"
+  ami           = "ami-0f7c83809e26276d0"
   instance_type = "t2.micro"
   /*iam_instance_profile = var.iam_role*/
-  key_name = "eric-key-2"
+  key_name = "oli-key"
   security_groups = [
-    "red-sg"
+    var.my_security_group
   ]
   tags = {
-    Name  = "Red Team (${var.servers[each.key]})"
+    Name  = "Platform Builders Jenkins Server"
     owner = var.owner
   }
 }

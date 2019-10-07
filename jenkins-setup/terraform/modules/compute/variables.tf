@@ -1,9 +1,9 @@
 variable "owner" {
-  default = "Red Team"
+  default = "Platform Builders"
 }
 
 variable "aws_account_owner" {
-  default = "295562591875"
+  default = "426714351745"
 }
 
 variable "from_port" {
@@ -18,9 +18,9 @@ variable "server_port" {
   default = "8080"
 }
 
-/*variable "my_security_group" {
-}*/
+variable "my_security_group" {
+}
 
 /*variable "iam_role" {
-  default = "red-team-ec2-s3-read-only"
+  default = "platform-ec2-s3-read-only"
 }*/

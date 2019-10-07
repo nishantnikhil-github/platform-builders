@@ -1,5 +1,5 @@
 /*variable "owner" {
-  default = "Red Team"
+  default = "Platform Builders"
 }
 
 variable "from_port" {
