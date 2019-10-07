@@ -1,0 +1,60 @@
+---
+# tasks file for roles/jenkins
+- name: install default-jre
+  package:
+    name: default-jre
+    state: present
+- name: install python3
+  package:
+    name: python3
+    state: present
+- name: install python3-setuptools
+  package:
+    name: python3-setuptools
+    state: present
+- shell: apt update
+#- get_url:
+#    url: https://bootstrap.pypa.io/get-pip.py
+#    dest: /tmp
+#- shell: python3 /tmp/get-pip.py --user
+#- name: Delete get-pip.py
+#  file:
+#    state: absent
+#    path: "/tmp/get-pip.py"
+- name: install python3-pip packages
+  package:
+    name: python3-pip
+    state: present
+- name: install awscli
+  package:
+    name: awscli
+    state: present
+- name: install unzip
+  package:
+    name: unzip
+    state: present
+- name: Download jenkins.war
+  get_url:
+    url: http://mirrors.jenkins.io/war-stable/latest/jenkins.war
+    dest: /usr/local/etc
+- name: Template a file to /etc/systemd/system/jenkins.service
+  template:
+    src: jenkins.service
+    dest: /etc/systemd/system/jenkins.service
+  notify:
+    - Restart Jenkins
+- name: Flush Handlers
+  meta: flush_handlers
+- name: Enable Jenkins service
+  service:
+    name: jenkins.service
+    enabled: yes
+- name: Wait until the password file shows up
+  wait_for:
+    path: /root/.jenkins/secrets/initialAdminPassword
+- shell: cat /root/.jenkins/secrets/initialAdminPassword
+  register: result
+- debug:
+    msg: "Password: {{ result.stdout }}"
+- local_action: copy content={{ result.stdout }} dest=/Users/olivia.blaine/Documents/tmp_jenkins_password
+  become: false
