@@ -58,3 +58,15 @@
     msg: "Password: {{ result.stdout }}"
 - local_action: copy content={{ result.stdout }} dest=/Users/olivia.blaine/Documents/tmp_jenkins_password
   become: false
+- name: Download terraform
+  get_url:
+    url: https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
+    dest: /tmp
+- name: unzip terraform and deploy in bin folder
+  shell: |
+  unzip /tmp/terraform_0.12.9_linux_amd64.zip
+  sudo mv /tmp/terraform /usr/bin/
+  args:
+    executable: /usr/bin/bash
+
+

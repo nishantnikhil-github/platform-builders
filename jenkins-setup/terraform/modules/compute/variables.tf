@@ -32,3 +32,15 @@ variable "key_name" {
 /*variable "iam_role" {
   default = "platform-ec2-s3-read-only"
 }*/
+
+variable "key_pairs" {
+
+    default = {
+        "nishantnikhil-github" = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDOs48N+jce8dPxkM891AUsAdhQJApC5Fh34DM15F/twqnWcDlJ2oATIFgoejDi6nBWSXN+NxvOz+5men9x/CKJMvMZhXaxsNOCGvClYz9HI+gJETbydQ7yvI81QtYO/wcqV6VcYUaPCspyXlFPBhLN7XMYr5nJ3HqCq2fMAsYqdK6hTsXAlgOWsYUbO5NZd/ln0r2edzl26xdzF6qmYpMdRdx+4tZOrmelgF094EKYtRnxYpyj89wsYAxp0JXJsqN4ryFy3eeJFymFuXslL9fLUcQ6g9nEzEfq6cYE5MGCpf1p34fEh/auxkvwGsKSwN4kjgfnWcQFpb4f8MoZzaP"
+        "olivia" = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVNvIJtNjLUuzbs6qVAceFMnqwNaRnq36wamUTspSJV7uG0+k2HKcul7x0p7Ejuj0Gvx+zgRytJV8HID/d0iWyKQkvMZjHn5ZY3ckFTCMa2mkx4OBQJl6nimxGmTv9uXgctviMbYlFwJtWz/XJY9IyXwDKII77RfIKKcUbKz2NDcjY81PHSFm7gcACmQ8jZjnizCI9Ha9t5x48lS7GQl1+1Mmb2gxHFzEh0R7W+ux/oGJ+C/D/5XltbLl/0Y2F6TMP72yKwz2dwQxcNpqYMyLV9IRfpNzUS9bl8bMyixZJUzkpaGrYeZU6fBlqWvwQ7TMXdzGcOON8ht+vPTxnNkE3"
+    }
+    
+
+
+
+}
