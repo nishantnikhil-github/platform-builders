@@ -17,7 +17,7 @@ variable "to_port" {
 variable "server_port" {
   default = "8080"
 }
-
+/*
 variable "my_security_group" {
 }
 
