@@ -20,7 +20,7 @@ variable "server_port" {
 
 variable "my_security_group" {
 }
-/*
+
 variable "key_name" {
 
 }
