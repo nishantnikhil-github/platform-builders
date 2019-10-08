@@ -12,7 +12,7 @@ resource "aws_security_group" "pb-sg" {
     from_port   = var.from_port
     to_port     = var.to_port
     protocol    = "tcp"
-    cidr_blocks = ["185.46.212.0/22]
+    cidr_blocks = ["185.46.212.0/22"]
   }
   ingress {
     from_port   = "22"
@@ -24,7 +24,7 @@ resource "aws_security_group" "pb-sg" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = ["185.46.212.0/22"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
