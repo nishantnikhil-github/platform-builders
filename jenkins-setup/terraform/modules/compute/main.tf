@@ -47,8 +47,8 @@ EOF
   }
 }
 
-resource "aws_iam_instance_profile" "jenkins_profile" {
-  name = "jenkins_profile"
+resource "aws_iam_instance_profile" "jenkins_profile-pb" {
+  name = "jenkins_profile-pb"
   role = "${aws_iam_role.jenkins_role.name}"
 }
 
@@ -73,7 +73,7 @@ EOF
 resource "aws_instance" "webserver" {
   ami           = "${data.aws_ami.pb_ami.id}"
   instance_type = "t2.micro"
-  iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile.name}"
+  iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile-pb.name}"
   key_name = "nishant-key"
   security_groups = [
     var.my_security_group,

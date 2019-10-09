@@ -1,0 +1,55 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Preparation') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
+                ])
+            }
+        
+        }
+        stage('TF Plan') {
+            steps {
+                container('terraform') {
+                sh 'cd eks-setup'
+                sh 'terraform init -backend-config=backend.hcl'
+                sh 'terraform plan -out myplan'
+                }
+            }      
+        }
+        stage('Approval') {
+            steps {
+                script {
+                    def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+                }
+            }
+        }
+        stage('Build EKS Cluster') {
+            steps {
+                sh '''
+                terraform apply --auto-approve
+                '''
+            }
+        }
+        stage('configure kubectl') {
+            steps {
+                sh 'mkdir ~/.kube'
+                sh 'terraform output kubeconfig > ~/.kube/config'
+                sh 'terraform output config_map_aws_auth > config_map_aws_auth.yml'
+                sh 'kubectl apply -f config_map_aws_auth.yml'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'cd ../test-scripts'
+                sh './test-eks-cluster.sh'
+            }
+        }
+    }
+}
