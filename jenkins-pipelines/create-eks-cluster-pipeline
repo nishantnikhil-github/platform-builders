@@ -16,11 +16,11 @@ pipeline {
         }
         stage('TF Plan') {
             steps {
-                container('terraform') {
-                sh 'cd eks-setup'
-                sh 'terraform init -backend-config=backend.hcl'
-                sh 'terraform plan -out myplan'
-                }
+                sh '''
+                cd eks-setup
+                terraform init -backend-config=backend.hcl
+                terraform plan -out myplan
+                '''
             }      
         }
         stage('Approval') {
@@ -39,16 +39,20 @@ pipeline {
         }
         stage('configure kubectl') {
             steps {
-                sh 'mkdir ~/.kube'
-                sh 'terraform output kubeconfig > ~/.kube/config'
-                sh 'terraform output config_map_aws_auth > config_map_aws_auth.yml'
-                sh 'kubectl apply -f config_map_aws_auth.yml'
+                sh '''
+                mkdir ~/.kube
+                terraform output kubeconfig > ~/.kube/config
+                terraform output config_map_aws_auth > config_map_aws_auth.yml
+                kubectl apply -f config_map_aws_auth.yml
+                '''
             }
         }
         stage('Test') {
             steps {
-                sh 'cd ../test-scripts'
-                sh './test-eks-cluster.sh'
+                sh '''
+                cd ../test-scripts
+                ./test-eks-cluster.sh
+                '''
             }
         }
     }
