@@ -9,26 +9,18 @@ pipeline {
                 checkout([$class: 'GitSCM',
                 branches: [[name: 'origin/master']],
                 extensions: [[$class: 'WipeWorkspace']],
-                userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
+                userRemoteConfigs: [[url: 'https://github.com/mhristof/fleetman.git']]
                 ])
             }
         
         }
-        stage('Build Cluster') {
+        stage('Build Images') {
             steps {
                 sh '''
-                cd ../test-scripts
-                ./buildcluster.sh
+                make build
                 '''
             }      
         }
-        stage('Test') {
-            steps {
-                sh '''
-                cd ../test-scripts
-                ./test-eks-cluster.sh
-                '''
-            }
-        }
+        
     }
 }
