@@ -12,9 +12,9 @@ else
     nodesop=`kubectl get nodes -o wide`
     if [ -z "$nodesop" ]
     then
-        exit 0
-    else
         exit 100
+    else
+        exit 0
     fi
     
 fi
