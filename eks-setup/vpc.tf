@@ -55,9 +55,7 @@ resource "aws_route_table" "eks-vpc-route_table" {
 
 resource "aws_route_table_association" "eks-vpc-route_table_association" {
   count = 2
-  tags = {
-    Name = "pb-vpc-route-table-asociation"
-  }
+  
 
   subnet_id      = "${aws_subnet.eks-vpc-subnet.*.id[count.index]}"
   route_table_id = "${aws_route_table.eks-vpc-route_table.id}"

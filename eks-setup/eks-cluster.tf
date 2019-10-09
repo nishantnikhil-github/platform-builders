@@ -28,17 +28,11 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "pb-terraform-eks-cluster-AmazonEKSClusterPolicy" {
-  tags = {
-    Name = "pb-terraform-eks-cluster-policy"
-  }
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = "${aws_iam_role.pb-terraform-eks-cluster.name}"
 }
 
 resource "aws_iam_role_policy_attachment" "pb-terraform-eks-cluster-AmazonEKSServicePolicy" {
-  tags = {
-    Name = "pb-terraform-eks-cluster-service-policy"
-  }
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = "${aws_iam_role.pb-terraform-eks-cluster.name}"
 }
@@ -68,9 +62,7 @@ resource "aws_security_group_rule" "pb-terraform-eks-cluster-ingress-node-https"
   source_security_group_id = "${aws_security_group.pb-terraform-eks-node-sg.id}"
   to_port                  = 443
   type                     = "ingress"
-  tags = {
-    Name = "pb-terraform-eks-cluster-ingress-node-https"
-  }
+  
 }
 
 resource "aws_security_group_rule" "pb-terraform-eks-cluster-ingress-workstation-https" {
@@ -82,9 +74,7 @@ resource "aws_security_group_rule" "pb-terraform-eks-cluster-ingress-workstation
   security_group_id = "${aws_security_group.pb-terraform-eks-cluster-sg.id}"
   to_port           = 443
   type              = "ingress"
-  tags = {
-    Name = "pb-terraform-eks-cluster-ingress-workstation-https"
-  }
+  
 }
 
 resource "aws_eks_cluster" "pb-terraform-eks-cluster" {

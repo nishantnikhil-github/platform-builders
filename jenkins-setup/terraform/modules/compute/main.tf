@@ -15,7 +15,7 @@ data "aws_ami" "pb_ami" {
     owner = "Platform Builders"
   }
 
-  owners = ["426714351745"]
+  owners = ["090107652998"]
 }
 
 resource "aws_key_pair" "nishant-key" {

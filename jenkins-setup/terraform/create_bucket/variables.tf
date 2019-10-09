@@ -1,5 +1,5 @@
 variable "bucket_name" {
-  default = "platform-builders-terraform"
+  default = "platform-builders"
 }
 
 variable "name_tag" {
