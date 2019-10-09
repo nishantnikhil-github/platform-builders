@@ -32,33 +32,25 @@ POLICY
 resource "aws_iam_role_policy_attachment" "pb-terraform-eks-node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = "${aws_iam_role.pb-terraform-eks-node.name}"
-  tags = {
-    Name = "pb-terraform-eks-node-AmazonEKSWorkerNodePolicy"
-  }
+  
 }
 
 resource "aws_iam_role_policy_attachment" "pb-terraform-eks-node-AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = "${aws_iam_role.pb-terraform-eks-node.name}"
-  tags = {
-    Name = "pb-terraform-eks-node-AmazonEKS_CNI_Policy"
-  }
+  
 }
 
 resource "aws_iam_role_policy_attachment" "pb-terraform-eks-node-AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = "${aws_iam_role.pb-terraform-eks-node.name}"
-  tags = {
-    Name = "pb-terraform-eks-node-AmazonEC2ContainerRegistryReadOnly"
-  }
+  
 }
 
 resource "aws_iam_instance_profile" "pb-terraform-eks-node" {
   name = "pb-terraform-eks-node"
   role = "${aws_iam_role.pb-terraform-eks-node.name}"
-  tags = {
-    Name = "pb-terraform-eks-node-profile"
-  }
+  
 }
 
 resource "aws_security_group" "pb-terraform-eks-node-sg" {
@@ -89,9 +81,7 @@ resource "aws_security_group_rule" "pb-terraform-eks-ingress-self" {
   source_security_group_id = "${aws_security_group.pb-terraform-eks-node-sg.id}"
   to_port                  = 65535
   type                     = "ingress"
-  tags = {
-    Name = "pb-terraform-eks-ingress-self"
-  }
+  
 }
 
 resource "aws_security_group_rule" "pb-terraform-eks-node-ingress-cluster" {
@@ -102,9 +92,7 @@ resource "aws_security_group_rule" "pb-terraform-eks-node-ingress-cluster" {
   source_security_group_id = "${aws_security_group.pb-terraform-eks-cluster-sg.id}"
   to_port                  = 65535
   type                     = "ingress"
-  tags = {
-    Name = "pb-terraform-eks-node-ingress-cluster"
-  }
+  
 }
 
 data "aws_ami" "eks-worker" {
@@ -134,7 +122,7 @@ resource "aws_launch_configuration" "pb-terraform-eks-lauch-config" {
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.pb-terraform-eks-node.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
-  instance_type               = "m4.large"
+  instance_type               = "t3.medium"
   name_prefix                 = "pb-terraform-eks-node"
   security_groups             = ["${aws_security_group.pb-terraform-eks-node-sg.id}"]
   user_data_base64            = "${base64encode(local.pb-terraform-eks-node-userdata)}"

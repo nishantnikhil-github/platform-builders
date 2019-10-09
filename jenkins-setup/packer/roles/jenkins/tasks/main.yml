@@ -21,6 +21,10 @@
 #  file:
 #    state: absent
 #    path: "/tmp/get-pip.py"
+- name: install make
+  package:
+    name: make
+    state: present
 - name: install python3-pip packages
   package:
     name: python3-pip
