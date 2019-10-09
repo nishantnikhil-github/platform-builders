@@ -16,17 +16,24 @@ pipeline {
         }
         stage('Build Cluster') {
             steps {
-                sh '''
-                cd ../test-scripts
-                ./buildcluster.sh
+                sh '''#!/bin/bash
+                cd eks-setup
+                terraform init -backend-config=backend.hcl
+                terraform plan
+                terraform apply --auto-approve
+                mkdir -p /root/.kube
+                terraform output kubeconfig > /root/.kube/config
+                export  KUBECONFIG=/root/.kube/config
+                terraform output config_map_aws_auth > /root/.kube/config_map_aws_auth.yml
+                kubectl apply -f /root/.kube/config_map_aws_auth.yml
                 '''
             }      
         }
         stage('Test') {
             steps {
                 sh '''
-                cd ../test-scripts
-                ./test-eks-cluster.sh
+                cd test-scripts
+                bash test-eks-cluster.sh
                 '''
             }
         }
