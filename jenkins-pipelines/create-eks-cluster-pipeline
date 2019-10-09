@@ -14,28 +14,15 @@ pipeline {
             }
         
         }
-        stage('TF Plan') {
+        stage('Build Cluster') {
             steps {
                 sh '''
                 cd eks-setup
                 terraform init -backend-config=backend.hcl
-                terraform plan -out myplan
-                '''
-            }      
-        }
-        stage('Approval') {
-            steps {
-                script {
-                    def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
-                }
-            }
-        }
-        stage('Build EKS Cluster') {
-            steps {
-                sh '''
+                terraform plan
                 terraform apply --auto-approve
                 '''
-            }
+            }      
         }
         stage('configure kubectl') {
             steps {
