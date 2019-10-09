@@ -58,7 +58,7 @@
     msg: "Password: {{ result.stdout }}"
 - local_action: copy content={{ result.stdout }} dest=/Users/nishant.nikhil/Documents/sdubootcamp-delivery/tmp_jenkins_password
   become: false
-- name: Get terrsform zipfile
+- name: Get terraform zipfile
   get_url:
     url: https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip
     dest: /tmp
