@@ -14,7 +14,7 @@ pipeline {
             }
 
         }
-        stage('Expose App') {
+        stage('Build Images') {
             steps {
                 sh '''
                 cd jenkins-pipelines

@@ -2,7 +2,7 @@
 
 pipeline {
     agent any
-
+    
     stages {
         stage('Preparation') {
             steps {
@@ -12,7 +12,7 @@ pipeline {
                 userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
                 ])
             }
-
+        
         }
         stage('Build Cluster') {
             steps {
@@ -27,7 +27,7 @@ pipeline {
                 terraform output config_map_aws_auth > /root/.kube/config_map_aws_auth.yml
                 kubectl apply -f /root/.kube/config_map_aws_auth.yml
                 '''
-            }
+            }      
         }
         stage('Test') {
             steps {

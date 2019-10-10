@@ -1,0 +1,42 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
+                ])
+            }
+
+        }
+        stage('expose images') {
+            steps {
+                sh '''
+                cd jenkins-pipelines
+                export  KUBECONFIG=/root/.kube/config_prod
+                cat /root/.kube/config_prod
+                kubectl apply -f /root/.kube/config_map_aws_auth_prod.yml
+                #docker run -v $PWD:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f expose-app.yml
+                kubectl apply -f expose-app.yml
+
+
+                '''
+            }
+        }
+
+        stage('Test Deployments') {
+            steps {
+                sh '''
+                cd test-scripts
+                bash test-lb.sh
+                '''
+            }
+        }
+
+    }
+}

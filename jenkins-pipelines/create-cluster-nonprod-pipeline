@@ -1,0 +1,41 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
+                ])
+            }
+
+        }
+        stage('Build Cluster') {
+            steps {
+                sh '''#!/bin/bash
+                cd eks-setup
+                terraform init -backend-config=backend.hcl -var-file=terraform-prod.tfvars
+                terraform plan -var-file=terraform-prod.tfvars
+                terraform apply -var-file=terraform-prod.tfvars --auto-approve
+                mkdir -p /root/.kube
+                terraform output kubeconfig > /root/.kube/config_prod
+                export  KUBECONFIG=/root/.kube/config_prod
+                terraform output config_map_aws_auth > /root/.kube/config_map_aws_auth_prod.yml
+                kubectl apply -f /root/.kube/config_map_aws_auth_prod.yml
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '''
+                cd test-scripts
+                bash test-eks-cluster-nonprod.sh
+                '''
+            }
+        }
+    }
+}
