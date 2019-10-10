@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "nishant-terraform-eks-node-AmazonEC2C
 }
 
 resource "aws_iam_instance_profile" "nishant-terraform-eks-node" {
-  name = "nishant-terraform-eks-node"
+  name = "${var.nishant-terraform-eks-node-instance-profile}"
   role = "${aws_iam_role.nishant-terraform-eks-node.name}"
 }
 

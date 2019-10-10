@@ -55,3 +55,8 @@ variable "nishant-terraform-eks-asg-name" {
   default = "nishant-terraform-eks-node-prod"
   type    = "string"
 }
+
+variable "nishant-terraform-eks-node-instance-profile" {
+  default = "nishant-terraform-eks-node-prod"
+  type    = "string"
+}
