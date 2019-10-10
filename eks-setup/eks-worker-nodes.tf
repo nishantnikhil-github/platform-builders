@@ -133,7 +133,7 @@ resource "aws_autoscaling_group" "nishant-terraform-eks-asg" {
 
   tag {
     key                 = "Name"
-    value               = "nishant-terraform-eks-node"
+    value               = "${var.nishant-terraform-eks-asg-name}"
     propagate_at_launch = true
   }
 

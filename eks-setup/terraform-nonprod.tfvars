@@ -8,3 +8,4 @@ nishant-terraform-eks-node-iam-role = "platform-builder-terraform-eks-node-nonpr
 nishant-terraform-eks-node-sg = "platform-builder-terraform-eks-node-sg-nonprod"
 nishant-terraform-eks-lauch-config = "platform-builder-terraform-eks-node-nonprod"
 nishant-terraform-eks-asg = "platform-builder-terraform-eks-node-nonprod"
+nishant-terraform-eks-asg-name = "platform-builder-terraform-eks-node-nonprod"
