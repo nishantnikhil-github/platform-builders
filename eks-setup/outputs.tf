@@ -28,13 +28,13 @@ clusters:
 - cluster:
     server: ${aws_eks_cluster.nishant-terraform-eks-cluster.endpoint}
     certificate-authority-data: ${aws_eks_cluster.nishant-terraform-eks-cluster.certificate_authority.0.data}
-  name: kubernetes
+  name: kubernetes-prod
 contexts:
 - context:
-    cluster: "kubernetes"
+    cluster: "kubernetes-prod"
     user: aws
-  name: aws
-current-context: aws
+  name: aws-prod
+current-context: aws-prod
 kind: Config
 preferences: {}
 users:
