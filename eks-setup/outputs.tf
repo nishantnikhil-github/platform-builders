@@ -13,7 +13,7 @@ metadata:
   namespace: kube-system
 data:
   mapRoles: |
-    - rolearn: ${aws_iam_role.pb-terraform-eks-node.arn}
+    - rolearn: ${aws_iam_role.nishant-terraform-eks-node.arn}
       username: system:node:{{EC2PrivateDNSName}}
       groups:
         - system:bootstrappers
@@ -26,8 +26,8 @@ CONFIGMAPAWSAUTH
 apiVersion: v1
 clusters:
 - cluster:
-    server: ${aws_eks_cluster.pb-terraform-eks-cluster.endpoint}
-    certificate-authority-data: ${aws_eks_cluster.pb-terraform-eks-cluster.certificate_authority.0.data}
+    server: ${aws_eks_cluster.nishant-terraform-eks-cluster.endpoint}
+    certificate-authority-data: ${aws_eks_cluster.nishant-terraform-eks-cluster.certificate_authority.0.data}
   name: kubernetes
 contexts:
 - context:

@@ -11,7 +11,7 @@ resource "aws_vpc" "eks-vpc" {
 
   tags = "${
     map(
-      "Name", "pb-vpc",
+      "Name", "${var.vpc-name}",
       "kubernetes.io/cluster/${var.cluster-name}", "shared",
     )
   }"
@@ -26,7 +26,7 @@ resource "aws_subnet" "eks-vpc-subnet" {
 
   tags = "${
     map(
-      "Name", "pb-vpc-subnet",
+      "Name", "${var.eks-vpc-subnet}",
       "kubernetes.io/cluster/${var.cluster-name}", "shared",
     )
   }"
@@ -36,16 +36,12 @@ resource "aws_internet_gateway" "eks-vpc-ig" {
   vpc_id = "${aws_vpc.eks-vpc.id}"
 
   tags = {
-    Name = "pb-eks-ig"
+    Name = "${var.eks-vpc-ig}"
   }
 }
 
 resource "aws_route_table" "eks-vpc-route_table" {
   vpc_id = "${aws_vpc.eks-vpc.id}"
-
-  tags = {
-    Name = "pb-vpc-route-table"
-  }
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -55,7 +51,6 @@ resource "aws_route_table" "eks-vpc-route_table" {
 
 resource "aws_route_table_association" "eks-vpc-route_table_association" {
   count = 2
-  
 
   subnet_id      = "${aws_subnet.eks-vpc-subnet.*.id[count.index]}"
   route_table_id = "${aws_route_table.eks-vpc-route_table.id}"
