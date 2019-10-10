@@ -14,7 +14,7 @@ pipeline {
             }
 
         }
-        stage('Build Images') {
+        stage('Deploy App') {
             steps {
                 sh '''
                 export  KUBECONFIG=/root/.kube/config
@@ -47,7 +47,7 @@ pipeline {
             steps {
                 sh '''
                 cd test-scripts
-                bash test-deployments-prod.sh
+                bash test-deployments.sh
                 '''
             }
         }

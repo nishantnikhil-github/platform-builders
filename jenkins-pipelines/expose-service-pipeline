@@ -2,7 +2,7 @@
 
 pipeline {
     agent any
-    
+
     stages {
         stage('Preparation') {
             steps {
@@ -12,9 +12,9 @@ pipeline {
                 userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
                 ])
             }
-        
+
         }
-        stage('Build Images') {
+        stage('Expose App') {
             steps {
                 sh '''
                 cd jenkins-pipelines
@@ -22,11 +22,20 @@ pipeline {
                 cat /root/.kube/config
                 #kubectl apply -f /root/.kube/config_map_aws_auth.yml
                 docker run -v $PWD:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f expose-app.yml
-            
-            
+
+
                 '''
-            }      
+            }
         }
-        
+
+        stage('Test Deployments') {
+            steps {
+                sh '''
+                cd test-scripts
+                bash test-lb.sh
+                '''
+            }
+        }
+
     }
 }

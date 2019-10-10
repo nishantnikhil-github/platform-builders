@@ -11,8 +11,7 @@ function kubectl {
     --kubeconfig /config $@
 }
 
-kubectl apply -f /root/.kube/config_map_aws_auth.yml
-kubectl get deployments > dep.txt
+kubectl get deployments | tee dep.txt
 
 val=`cat dep.txt| wc -l`
 
