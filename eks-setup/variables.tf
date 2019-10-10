@@ -60,3 +60,8 @@ variable "nishant-terraform-eks-node-instance-profile" {
   default = "nishant-terraform-eks-node-prod"
   type    = "string"
 }
+
+variable "context-name" {
+  default = "platform-builder-prod"
+  type    = "string"
+}
