@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export  KUBECONFIG=/root/.kube/config
-kubectl apply -f /root/.kube/config_map_aws_auth.yml
+export  KUBECONFIG=/root/.kube/config_nonprod
+kubectl apply -f /root/.kube/config_map_aws_auth_nonprod.yml
 kubectl version > op.txt
 val=`cat op.txt | grep "Server"`
 if [ -z "$val" ]
