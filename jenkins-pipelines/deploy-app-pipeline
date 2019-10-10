@@ -36,7 +36,7 @@ pipeline {
             steps {
                 sh '''
                 cd test-scripts
-                bash test_deployments.sh
+                bash test-deployments.sh
                 '''
             }
         }
