@@ -1,6 +1,16 @@
 #!/bin/bash
 
-export  KUBECONFIG=/root/.kube/config
+
+function kubectl {
+  docker run -v $PWD:/work \
+    -w /work \
+    -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator \
+    -v /root/.kube/config:/config \
+    --rm --name kubectl \
+    bitnami/kubectl:latest \
+    --kubeconfig /config $@
+}
+
 kubectl apply -f /root/.kube/config_map_aws_auth.yml
 kubectl get deployments > dep.txt
 
