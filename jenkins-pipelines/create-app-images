@@ -2,7 +2,7 @@
 
 pipeline {
     agent any
-    
+
     stages {
         stage('Preparation') {
             steps {
@@ -12,15 +12,25 @@ pipeline {
                 userRemoteConfigs: [[url: 'https://github.com/nishantnikhil-github/pb-fleetman.git']]
                 ])
             }
-        
+
         }
+
         stage('Build Images') {
             steps {
                 sh '''
                 make build
                 '''
-            }      
+            }
         }
-        
+
+        stage('Test Images') {
+            steps {
+                sh '''
+                cd test-scripts
+                bash test-images.sh
+                '''
+            }
+        }
+
     }
 }
