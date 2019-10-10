@@ -23,6 +23,17 @@ pipeline {
             }
         }
 
+        stage('Preparation 2') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/Prasanth-Sasidharan/platform-builders.git']]
+                ])
+            }
+
+        }
+
         stage('Test Images') {
             steps {
                 sh '''
