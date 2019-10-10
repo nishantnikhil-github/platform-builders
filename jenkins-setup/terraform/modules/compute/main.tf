@@ -43,7 +43,7 @@ resource "aws_iam_role" "jenkins_role" {
 EOF
 
   tags = {
-      Name = "Platform-Builder"
+    Name = "Platform-Builder"
   }
 }
 
@@ -71,10 +71,10 @@ EOF
 }
 
 resource "aws_instance" "webserver" {
-  ami           = "${data.aws_ami.pb_ami.id}"
-  instance_type = "t2.micro"
+  ami                  = "${data.aws_ami.pb_ami.id}"
+  instance_type        = "t3.medium"
   iam_instance_profile = "${aws_iam_instance_profile.jenkins_profile-pb.name}"
-  key_name = "nishant-key"
+  key_name             = "nishant-key"
   security_groups = [
     var.my_security_group,
   ]
