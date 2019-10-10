@@ -31,10 +31,10 @@ clusters:
   name: kubernetes
 contexts:
 - context:
-    cluster: kubernetes
+    cluster: "${var.context-name}"
     user: aws
-  name: aws
-current-context: aws
+  name: "${var.context-name}"
+current-context: "${var.context-name}"
 kind: Config
 preferences: {}
 users:

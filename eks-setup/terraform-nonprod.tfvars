@@ -10,3 +10,4 @@ nishant-terraform-eks-lauch-config = "platform-builder-terraform-eks-node-nonpro
 nishant-terraform-eks-asg = "platform-builder-terraform-eks-node-nonprod"
 nishant-terraform-eks-asg-name = "platform-builder-terraform-eks-node-nonprod"
 nishant-terraform-eks-node-instance-profile = "nishant-terraform-eks-node-nonprod"
+context-name = "platform-builder-nonprod"
