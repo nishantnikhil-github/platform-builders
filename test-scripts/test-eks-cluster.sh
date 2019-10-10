@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export  KUBECONFIG=/root/.kube/config
+kubectl apply -f /root/.kube/config_map_aws_auth.yml
 kubectl version > op.txt
 val=`cat op.txt | grep "Server"`
 if [ -z "$val" ]
@@ -10,9 +12,9 @@ else
     nodesop=`kubectl get nodes -o wide`
     if [ -z "$nodesop" ]
     then
-        exit 0
-    else
         exit 100
+    else
+        exit 0
     fi
     
 fi

@@ -1,0 +1,26 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Preparation') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/nishantnikhil-github/pb-fleetman.git']]
+                ])
+            }
+        
+        }
+        stage('Build Images') {
+            steps {
+                sh '''
+                make build
+                '''
+            }      
+        }
+        
+    }
+}
