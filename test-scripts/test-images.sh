@@ -2,7 +2,7 @@
 
 aws ecr describe-repositories > rop.txt
 
-val=`cat rop.txt|grep "repositoryName"|egrep "position-simulator|queue|position-tracker|api-gateway|webapp"|wc -l`
+val=`cat rop.txt|grep "repositoryName"|egrep "position-simulator|queue|position-tracker|api-gateway|webapp|jenkins"|wc -l`
 
 if [ "$val" -ne 6 ]
 then
