@@ -12,7 +12,7 @@ function kubectl {
 
 kubectl get svc | tee lb.txt
 
-val=`cat lb.txt|grep "TYPE"|egrep "LoadBalancer"`
+val=`cat lb.txt|grep "LoadBalancer"`
 
 if [ -z "$val" ]
 then
