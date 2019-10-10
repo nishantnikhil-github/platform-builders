@@ -1,0 +1,36 @@
+#!/usr/bin/env groovy
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('Preparation') {
+            steps {
+                checkout([$class: 'GitSCM',
+                branches: [[name: 'origin/master']],
+                extensions: [[$class: 'WipeWorkspace']],
+                userRemoteConfigs: [[url: 'https://github.com/nishantnikhil-github/pb-fleetman.git']]
+                ])
+            }
+        
+        }
+        stage('Build Images') {
+            steps {
+                sh '''
+                export  KUBECONFIG=/root/.kube/config
+                cat /root/.kube/config
+                #kubectl apply -f /root/.kube/config_map_aws_auth.yml
+                docker run -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config cluster-info
+                docker run -v $PWD/mongodb/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+                docker run -v $PWD/api-gateway/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+                docker run -v $PWD/position-tracker/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+                docker run -v $PWD/queue/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+                docker run -v $PWD/webapp/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+                docker run -v $PWD/position-simulator/:/work -w /work -v /usr/bin/aws-iam-authenticator:/usr/bin/aws-iam-authenticator -v /root/.kube/config:/config --rm --name kubectl bitnami/kubectl:latest --kubeconfig /config apply -f deploy.yaml
+            
+                '''
+            }      
+        }
+        
+    }
+}

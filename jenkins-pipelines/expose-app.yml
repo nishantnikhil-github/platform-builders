@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service                    # Type of kubernetes resource
+metadata:
+  name: webapp   # Name of the resource
+spec:
+  type: LoadBalancer                # A port is opened on each node in your cluster via Kube proxy.
+  ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8080
+  - protocol: TCP
+    port: 9092
+    targetPort: 80
+  selector:
+    app: webapp         # Map any pod with label `app=go-hello-world` to this service
