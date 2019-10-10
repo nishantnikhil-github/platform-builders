@@ -9,9 +9,9 @@ test-deployments:
 
 test-eks-cluster-nonprod & test-eks-cluster-prod:
 Step 1: Run kubectl describe-repositories command to list your repositories and output to a file called rop.txt
-Step 2:
-Step 3:
-Step 4:
+Step 2: Check whether the server has been created by grepping for Server in the file
+Step 3: If server not found, then fail the pipeline with code 100. If success, complete the piepline.
+
 
 test-images:
 Step 1: Run kubectl describe-repositories command to list your repositories and output to a file called rop.txt
@@ -20,6 +20,6 @@ Step 3: If repositories found, success. If 6 not found, fail pipeline with error
 
 test-lb:
 Step 1: Run kubectl via docker container in order to use that config file
-Step 2:
-Step 3:
-Step 4:
+Step 2: Run get svc to
+Step 3: Check whether the load balancer has been created by grepping for LoadBalancer in the file
+Step 4: If found, pass the test. If not found, exit with code 127 and fail the pipeline.
