@@ -5,12 +5,9 @@
 #  * EKS Cluster
 #
 
-resource "aws_iam_role" "pb-terraform-eks-cluster" {
-  name = "pb-terraform-eks-cluster"
+resource "aws_iam_role" "nishant-terraform-eks-cluster" {
+  name = "${var.nishant-terraform-eks-cluster-iam-role}"
 
-  tags = {
-    Name = "pb-terraform-eks-cluster"
-  }
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -27,18 +24,18 @@ resource "aws_iam_role" "pb-terraform-eks-cluster" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "pb-terraform-eks-cluster-AmazonEKSClusterPolicy" {
+resource "aws_iam_role_policy_attachment" "nishant-terraform-eks-cluster-AmazonEKSClusterPolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = "${aws_iam_role.pb-terraform-eks-cluster.name}"
+  role       = "${aws_iam_role.nishant-terraform-eks-cluster.name}"
 }
 
-resource "aws_iam_role_policy_attachment" "pb-terraform-eks-cluster-AmazonEKSServicePolicy" {
+resource "aws_iam_role_policy_attachment" "nishant-terraform-eks-cluster-AmazonEKSServicePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-  role       = "${aws_iam_role.pb-terraform-eks-cluster.name}"
+  role       = "${aws_iam_role.nishant-terraform-eks-cluster.name}"
 }
 
-resource "aws_security_group" "pb-terraform-eks-cluster-sg" {
-  name        = "pb-terraform-eks-cluster"
+resource "aws_security_group" "nishant-terraform-eks-cluster-sg" {
+  name        = "nishant-terraform-eks-cluster"
   description = "Cluster communication with worker nodes"
   vpc_id      = "${aws_vpc.eks-vpc.id}"
 
@@ -50,47 +47,42 @@ resource "aws_security_group" "pb-terraform-eks-cluster-sg" {
   }
 
   tags = {
-    Name = "pb-terraform-eks-cluster-sg"
+    Name = "${var.nishant-terraform-eks-cluster-sg}"
   }
 }
 
-resource "aws_security_group_rule" "pb-terraform-eks-cluster-ingress-node-https" {
+resource "aws_security_group_rule" "nishant-terraform-eks-cluster-ingress-node-https" {
   description              = "Allow pods to communicate with the cluster API Server"
   from_port                = 443
   protocol                 = "tcp"
-  security_group_id        = "${aws_security_group.pb-terraform-eks-cluster-sg.id}"
-  source_security_group_id = "${aws_security_group.pb-terraform-eks-node-sg.id}"
+  security_group_id        = "${aws_security_group.nishant-terraform-eks-cluster-sg.id}"
+  source_security_group_id = "${aws_security_group.nishant-terraform-eks-node-sg.id}"
   to_port                  = 443
   type                     = "ingress"
-  
 }
 
-resource "aws_security_group_rule" "pb-terraform-eks-cluster-ingress-workstation-https" {
-  cidr_blocks       = ["${local.workstation-external-cidr}"]
-  #cidr_blocks       = ["0.0.0.0/0"]
+resource "aws_security_group_rule" "nishant-terraform-eks-cluster-ingress-workstation-https" {
+  #cidr_blocks       = ["${local.workstation-external-cidr}"]
+  cidr_blocks       = ["0.0.0.0/0"]
   description       = "Allow workstation to communicate with the cluster API Server"
   from_port         = 443
   protocol          = "tcp"
-  security_group_id = "${aws_security_group.pb-terraform-eks-cluster-sg.id}"
+  security_group_id = "${aws_security_group.nishant-terraform-eks-cluster-sg.id}"
   to_port           = 443
   type              = "ingress"
-  
 }
 
-resource "aws_eks_cluster" "pb-terraform-eks-cluster" {
+resource "aws_eks_cluster" "nishant-terraform-eks-cluster" {
   name     = "${var.cluster-name}"
-  role_arn = "${aws_iam_role.pb-terraform-eks-cluster.arn}"
+  role_arn = "${aws_iam_role.nishant-terraform-eks-cluster.arn}"
 
   vpc_config {
-    security_group_ids = ["${aws_security_group.pb-terraform-eks-cluster-sg.id}"]
+    security_group_ids = ["${aws_security_group.nishant-terraform-eks-cluster-sg.id}"]
     subnet_ids         = "${aws_subnet.eks-vpc-subnet[*].id}"
-  }
-  tags = {
-    Name = "pb-terraform-eks-cluster"
   }
 
   depends_on = [
-    "aws_iam_role_policy_attachment.pb-terraform-eks-cluster-AmazonEKSClusterPolicy",
-    "aws_iam_role_policy_attachment.pb-terraform-eks-cluster-AmazonEKSServicePolicy",
+    "aws_iam_role_policy_attachment.nishant-terraform-eks-cluster-AmazonEKSClusterPolicy",
+    "aws_iam_role_policy_attachment.nishant-terraform-eks-cluster-AmazonEKSServicePolicy",
   ]
 }
